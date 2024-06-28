@@ -251,7 +251,7 @@ export default function DashBoard({ navigation }) {
           }
         }>
 
-          <TouchableOpacity onPress={() => Copy_Rigth()} style={
+          <TouchableOpacity delayLongPress={7000} onLongPress={() => Copy_Rigth()} style={
             {
               height: "20%",
               width: "90%",
