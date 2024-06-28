@@ -67,6 +67,15 @@ const FormScreen = ({ navigation }) => {
   );
 
 
+  function truncateString(str, num) {
+    if (str.length <= num) {
+      return str;
+    }
+    return str.slice(0, num) + '...';
+  }
+
+
+
   const sendImage = async (imageData, imageName, who) => {
     let old_imaga;
     setIaerro(false);
@@ -81,17 +90,17 @@ const FormScreen = ({ navigation }) => {
         break;
 
       case "imgb":
-        old_imaga = imga;
+        old_imaga = imgb;
         setImgbding(true);
         break;
 
       case "imgc":
-        old_imaga = imga;
+        old_imaga = imgc;
         setImgcding(true);
         break;
 
       case "imgd":
-        old_imaga = imga;
+        old_imaga = imgd;
         setImgdding(true);
         break;
 
@@ -105,15 +114,20 @@ const FormScreen = ({ navigation }) => {
         break;
     }
 
+    const ImageDatas = {
+      ima: imageData,
+      nam: imageName,
+      old_image: old_imaga ? old_imaga : null
+    }
+
+
+    //const truncatedString = truncateString(ImageDatas.ima, 130);
+
+    //console.log(truncatedString);
     try {
-      const response = await axios.post(`${routx.tunal}boutique/uploadImage`, {
-        ima: imageData,
-        nam: imageName,
-        old_image: old_imaga ? old_imaga : null
-      });
+      const response = await axios.post(`${routx.tunal}boutique/uploadImage`, ImageDatas);
 
       const imageUrl = response.data.ima;
-      console.log(response.data.ima);
 
       switch (who) {
         case "imga":

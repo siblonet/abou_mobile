@@ -246,7 +246,7 @@ export default function DashBoard({ navigation }) {
             flex: 1,
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: "#000"
+            backgroundColor: "#eee"
 
           }
         }>
