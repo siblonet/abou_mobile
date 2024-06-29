@@ -9,6 +9,8 @@ import { picts, routx } from "../utilitis";
 import axios from "axios";
 import { LinearGradient } from "expo-linear-gradient";
 import * as ImagePicker from 'expo-image-picker';
+import * as Sharing from 'expo-sharing';
+import * as Linking from 'expo-linking';
 
 
 const WIDTH = Dimensions.get("window").width;
@@ -273,6 +275,25 @@ export default function DetailScreen({ navigation, route }) {
     );
   }
 
+
+  const shareLink = async (idd) => {
+    const url = `https://abouvoiture.netlify.app/details_view#${idd}`; // The link you want to share
+
+    try {
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(url);
+      } else {
+        const supported = await Linking.canOpenURL(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`);
+        if (supported) {
+          await Linking.openURL(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`);
+        } else {
+          Alert.alert('Sharing not available', 'Sharing is not available on this device or platform.');
+        }
+      }
+    } catch (error) {
+      console.error('Error sharing:', error);
+    }
+  };
 
   return (
     <View style={hilai.container}>
@@ -932,9 +953,38 @@ export default function DetailScreen({ navigation, route }) {
             padding: 10,
             width: '100%',
             alignItems: "center",
+            flexDirection: 'row',
+            justifyContent: "space-around"
 
           }}>
-        
+            <LinearGradient
+              style={
+                {
+                  shadowOffset: {
+                    width: 0,
+                    height: 1,
+                  },
+                  shadowOpacity: 1,
+                  shadowColor: '#ccc',
+                  elevation: 5,
+                  borderRadius: 8,
+                }
+              }
+              colors={["#6fcaea", "#99e6ae"]}
+              start={{ x: 0, y: 1 }}
+              end={{ x: 1.5, y: 1 }}
+            >
+              <TouchableOpacity
+                style={{
+                  paddingHorizontal: 18,
+                  paddingVertical: 5
+
+                }}
+                onPress={() => shareLink(car._id)}
+              >
+
+              </TouchableOpacity>
+            </LinearGradient>
 
             <LinearGradient
               style={
