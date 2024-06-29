@@ -9,7 +9,6 @@ import { picts, routx } from "../utilitis";
 import axios from "axios";
 import { LinearGradient } from "expo-linear-gradient";
 import * as ImagePicker from 'expo-image-picker';
-import * as Sharing from 'expo-sharing';
 import * as Linking from 'expo-linking';
 
 
@@ -276,24 +275,23 @@ export default function DetailScreen({ navigation, route }) {
   }
 
 
-  const shareLink = async (idd) => {
-    const url = `https://abouvoiture.netlify.app/details_view#${idd}`; // The link you want to share
 
+  const shareLink = async (idd) => {
+    const url = `https://abouvoiture.netlify.app/details_view#${idd}`;
+  
     try {
-      if (await Sharing.isAvailableAsync()) {
-        await Sharing.shareAsync(url);
+      const supported = await Linking.canOpenURL(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`);
+      if (supported) {
+        await Linking.openURL(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`);
       } else {
-        const supported = await Linking.canOpenURL(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`);
-        if (supported) {
-          await Linking.openURL(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`);
-        } else {
-          Alert.alert('Sharing not available', 'Sharing is not available on this device or platform.');
-        }
+        Alert.alert('Sharing not available', 'Sharing is not available on this device or platform.');
       }
     } catch (error) {
       console.error('Error sharing:', error);
+      Alert.alert('Error', 'Failed to share the link.');
     }
   };
+  
 
   return (
     <View style={hilai.container}>
@@ -977,12 +975,18 @@ export default function DetailScreen({ navigation, route }) {
               <TouchableOpacity
                 style={{
                   paddingHorizontal: 18,
-                  paddingVertical: 5
+                  paddingVertical: 5,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
 
                 }}
                 onPress={() => shareLink(car._id)}
               >
-
+                <Ionicons name="share-social-outline" size={20} style={{ color: "#000" }} />
+                <Text style={{ fontSize: 15, color: "#000" }}>
+                  Partager
+                </Text>
               </TouchableOpacity>
             </LinearGradient>
 
